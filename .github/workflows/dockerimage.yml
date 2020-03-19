@@ -15,7 +15,7 @@ jobs:
         run: docker build . --file Dockerfile --tag stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
       - name: Push docker-image
         run: |
-          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --user stockanalyses --password-stdin
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username stockanalyses --password-stdin
           docker push stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
   grub-build:
     runs-on: ubuntu-latest
