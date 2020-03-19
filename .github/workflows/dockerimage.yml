@@ -16,10 +16,12 @@ jobs:
       - name: Push docker-image
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username stockanalyses --password-stdin
+          docker tag stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7} stoxygen/grub-atom-z3735f:latest
           docker push stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
+          docker push stoxygen/grub-atom-z3735f:latest
   grub-build:
     runs-on: ubuntu-latest
-    container: stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
+    container: stoxygen/grub-atom-z3735f:latest
     steps:
       - name: Build grub
         run: |
