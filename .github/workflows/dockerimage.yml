@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker image
+        run: docker build . --file Dockerfile --tag grub-atom-z3735f:latest
+  grub-build:
+    runs-on: ubuntu-latest
+    container:
+      image: grub-atom-z3735f:latest
+      steps:
+        - name: Build grub
+          run: |
+            ./autogen.sh
+            ./configure --with-platform=efi --target=i386 --disable-werror
+            make
+            make install
+            /usr/local/bin/grub-mknetdir -d /usr/local/lib/grub/i386-efi --net-directory=/tmp
