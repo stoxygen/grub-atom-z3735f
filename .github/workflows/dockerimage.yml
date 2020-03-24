@@ -25,6 +25,7 @@ jobs:
     steps:
       - name: Build grub
         run: |
+          echo $(pwd)
           ./autogen.sh
           ./configure --with-platform=efi --target=i386 --disable-werror
           make
