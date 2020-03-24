@@ -19,15 +19,23 @@ jobs:
           docker tag stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7} stoxygen/grub-atom-z3735f:latest
           docker push stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
           docker push stoxygen/grub-atom-z3735f:latest
-  grub-build:
-    runs-on: ubuntu-latest
-    container: stoxygen/grub-atom-z3735f:latest
-    steps:
-      - name: Build grub
-        run: |
-          echo $(pwd)
-          ./autogen.sh
-          ./configure --with-platform=efi --target=i386 --disable-werror
-          make
-          make install
-          /usr/local/bin/grub-mknetdir -d /usr/local/lib/grub/i386-efi --net-directory=/tmp
+      - uses: docker://sotxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
+        with:
+          args: |
+            ./autogen.sh
+            ./configure --with-platform=efi --target=i386 --disable-werror
+            make
+            make install
+            /usr/local/bin/grub-mknetdir -d /usr/local/lib/grub/i386-efi --net-directory=/tmp
+#  grub-build:
+#    runs-on: ubuntu-latest
+#    container: stoxygen/grub-atom-z3735f:latest
+#    steps:
+#      - name: Build grub
+#        run: |
+#          echo $(pwd)
+#          ./autogen.sh
+#          ./configure --with-platform=efi --target=i386 --disable-werror
+#          make
+#          make install
+#          /usr/local/bin/grub-mknetdir -d /usr/local/lib/grub/i386-efi --net-directory=/tmp
