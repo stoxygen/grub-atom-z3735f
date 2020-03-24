@@ -19,7 +19,7 @@ jobs:
           docker tag stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7} stoxygen/grub-atom-z3735f:latest
           docker push stoxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
           docker push stoxygen/grub-atom-z3735f:latest
-      - uses: docker://sotxygen/grub-atom-z3735f:${GITHUB_SHA:0:7}
+      - uses: docker://sotxygen/grub-atom-z3735f:latest
         with:
           args: |
             ./autogen.sh
