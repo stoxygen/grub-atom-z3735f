@@ -15,7 +15,7 @@ jobs:
         run: sudo apt-get install -qq -y curl ca-certificates bison libopts25 libselinux1-dev autogen m4 autoconf help2man libopts25-dev flex libfont-freetype-perl automake autotools-dev libfreetype6-dev texinfo autopoint libfuse-dev libdevmapper-dev make --no-install-recommends
       - name: Prepare build
         run: |
-        mkdir /tmp/grub
+          mkdir /tmp/grub
           curl https://alpha.gnu.org/gnu/grub/grub-2.04~rc1.tar.gz --output /tmp/grub.tar.gz
           tar -xzf /opt/grub.tar.gz --strip-components=1 -C /opt/grub
       - name: Build
