@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir /tmp/grub
           curl https://alpha.gnu.org/gnu/grub/grub-2.04~rc1.tar.gz --output /tmp/grub.tar.gz
-          tar -xzf /opt/grub.tar.gz --strip-components=1 -C /tmp/grub
+          tar -xzf /tmp/grub.tar.gz --strip-components=1 -C /tmp/grub
       - name: Build
         run: |
           cd /tmp/grub
