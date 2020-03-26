@@ -24,5 +24,5 @@ jobs:
           ./autogen.sh
           ./configure --with-platform=efi --target=i386 --disable-werror
           make
-          make install
+          sudo make install
           /usr/local/bin/grub-mknetdir -d /usr/local/lib/grub/i386-efi --net-directory=/tmp
