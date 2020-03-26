@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build:
+    name: Upload release asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt-get install -qq -y curl ca-certificates bison libopts25 libselinux1-dev autogen m4 autoconf help2man libopts25-dev flex libfont-freetype-perl automake autotools-dev libfreetype6-dev texinfo autopoint libfuse-dev libdevmapper-dev make --no-install-recommends
+      - name: Prepare build
+        run: |
+          mkdir /tmp/grub
+          curl https://alpha.gnu.org/gnu/grub/grub-2.04~rc1.tar.gz --output /tmp/grub.tar.gz
+          tar -xzf /tmp/grub.tar.gz --strip-components=1 -C /tmp/grub
+      - name: Build
+        run: |
+          cd /tmp/grub
+          ./autogen.sh
+          ./configure --with-platform=efi --target=i386 --disable-werror
+          make
+          sudo make install
+          /usr/local/bin/grub-mknetdir -d /usr/local/lib/grub/i386-efi --net-directory=/tmp
+      - name: Package release
+        run: |
+          cd /tmp
+          zip -r release.zip boot
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload release asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./release.zip
+          asset_name: release.zip
+          asset_content_type: application/zip
